@@ -3,4 +3,8 @@
     <string name="one">Fragment #1</string>
     <string name="two">Fragment #2</string>
     <string name="hihg_speet">hihg speet</string>
+    <string name="title_activity_maps">Map</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

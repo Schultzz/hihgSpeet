@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OneFragment(), "Boat info");
-        adapter.addFragment(new TwoFragment(), "Boat navigation");
+        adapter.addFragment(new MapFragment(), "Boat navigation");
         viewPager.setAdapter(adapter);
     }
 
