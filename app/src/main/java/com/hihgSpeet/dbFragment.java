@@ -12,9 +12,9 @@ import com.hihgSpeet.R;
 /**
  * Created by asd on 12-12-2015.
  */
-public class TwoFragment extends Fragment {
+public class dbFragment extends Fragment {
 
-    public TwoFragment() {
+    public dbFragment() {
         // Required empty public constructor
     }
 

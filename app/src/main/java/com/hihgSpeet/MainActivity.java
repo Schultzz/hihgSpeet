@@ -42,12 +42,13 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new OneFragment(), "Boat info");
         adapter.addFragment(new MapFragment(), "Boat navigation");
+        adapter.addFragment(new dbFragment(), "Boat Pos");
         viewPager.setAdapter(adapter);
     }
 
     class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+        private final List<Fragment> mFragmentList = new ArrayList();
+        private final List<String> mFragmentTitleList = new ArrayList();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);

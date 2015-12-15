@@ -33,7 +33,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private Marker currentMarker;
-    private ArrayList<Marker> markers = new ArrayList<>();
+    private ArrayList<Marker> markers = new ArrayList();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -124,6 +124,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         };
 
         // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
     }
 }
