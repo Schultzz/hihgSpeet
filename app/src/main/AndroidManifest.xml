@@ -83,6 +83,13 @@
             android:exported="false">
         </service>
 
+        <service
+            android:name="com.hihgSpeet.RestService"
+            android:enabled="true"
+            android:exported="true">
+
+        </service>
+
     </application>
 
 </manifest>

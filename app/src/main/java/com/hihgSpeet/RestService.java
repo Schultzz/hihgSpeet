@@ -1,9 +1,11 @@
 package com.hihgSpeet;
 
+import android.app.IntentService;
+import android.content.Intent;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import self.philbrown.droidQuery.$;
@@ -13,52 +15,72 @@ import self.philbrown.droidQuery.Function;
 /**
  * Created by asd on 14-12-2015.
  */
-public class RestService {
+public class RestService extends IntentService {
 
-    private boatInfoFragment context;
-
-    public RestService(boatInfoFragment context) {
-        this.context = context;
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     *
+     * @param name Used to name the worker thread, important only for debugging.
+     */
+    public RestService() {
+        super("RestService");
+    }
+    @Override
+    public IBinder onBind(Intent intent) {
+        // TODO: Return the communication channel to the service.
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
-    public String getJSON() {
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
+        return super.onStartCommand(intent,flags,startId);
+    }
+    /**
+     * The IntentService calls this method from the default worker thread with
+     * the intent that started the service. When this method returns, IntentService
+     * stops the service, as appropriate.
+     */
+    @Override
+    protected void onHandleIntent(Intent intent) {
+
+        System.out.println("IN HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+
+        String data = intent.getExtras().getString("json");
+
+        data = "{\"test\":\"bred ymer\"}";
 
         String rsp = "";
         //http://10.0.3.2 = genymotion's IP til computerens localhost
-        $.ajax(new AjaxOptions().url("http://jsonplaceholder.typicode.com/posts/1")
-                .type("GET")
-                .dataType("json")
-                .context(context.getContext())
+        $.ajax(new AjaxOptions()
+                .url("https://pure-cove-4683.herokuapp.com/api/route")
+                .type("POST")
+                .dataType("JSON")
+                .data(data)
+                .contentType("application/json")
                 .success(new Function() {
-                    //                    @Override
-//                    public void invoke($ droidQuery, Object... params) {
-//                        droidQuery.alert((String) params[0]);
-//                    }
                     @Override
                     public void invoke($ droidQuery, Object... params) {
                         JSONObject response = (JSONObject) params[0];
-
-                        try {
-                            Toast.makeText(context.getActivity(), response.getString("body"), Toast.LENGTH_SHORT).show();
-                            context.addItem(response.getString("body"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        //System.out.println(response + " 11111111111111111111111111");
-
-                        //droidQuery.alert(response.toString())-*;
+                        System.out.println("11111111111111111111111111111111111111111111");
+                        Log.e("ServerDb-createList-suc", response.toString());
                     }
-                }).error(new Function() {
+                })
+                .error(new Function() {
                     @Override
                     public void invoke($ droidQuery, Object... params) {
                         int statusCode = (Integer) params[1];
                         String error = (String) params[2];
-                        Log.e("Ajax", statusCode + " " + error);
+                        System.out.println("22222222222222222222222222222222222222222222222");
+                        Log.e("ServerDb-createList-err", statusCode + " " + error);
                     }
-                }));
-        return "";
+                }).debug(true));
 
+    }
+
+    @Override
+    public void onDestroy() {
+        Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
 
 

@@ -1,5 +1,6 @@
 package com.hihgSpeet;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.ListFragment;
 import android.os.Bundle;
@@ -18,7 +19,6 @@ import java.util.ArrayList;
 public class boatInfoFragment extends ListFragment {
 
     private double lat, lon;
-    private RestService rest;
     private BoatDb db;
     private ArrayList<String> listItems = new ArrayList();
 
@@ -67,8 +67,6 @@ public class boatInfoFragment extends ListFragment {
                 android.R.layout.simple_list_item_1, listItems);
         setListAdapter(adapter);
 
-        rest = new RestService(this);
-
         db = new BoatDb(this.getContext());
         db.open();
 
@@ -79,7 +77,12 @@ public class boatInfoFragment extends ListFragment {
         Toast.makeText(getActivity(), this.getListAdapter().getItem(position).toString(), Toast.LENGTH_SHORT).show();
         if (position == 5) {
             // rest.getJSON();
-            System.out.println(db.createCordinats(lat, lon));
+            System.out.println("inside 5.....................");
+            Intent intent = new Intent(getActivity(), RestService.class);
+            intent.putExtra("json", "bjørn");
+            getActivity().startService(intent);
+
+           // System.out.println(db.createCordinats(lat, lon));
         } else if (position == 1) {
             db.deleteTable();
         } else if (position == 0) {
