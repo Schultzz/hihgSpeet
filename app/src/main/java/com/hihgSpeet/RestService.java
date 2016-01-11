@@ -48,8 +48,6 @@ public class RestService extends IntentService {
 
         String data = intent.getExtras().getString("json");
 
-        data = "{\"test\":\"bred ymer\"}";
-
         String rsp = "";
         //http://10.0.3.2 = genymotion's IP til computerens localhost
         $.ajax(new AjaxOptions()

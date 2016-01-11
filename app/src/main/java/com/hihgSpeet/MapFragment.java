@@ -1,6 +1,7 @@
 package com.hihgSpeet;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
@@ -81,6 +82,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     Log.d("PER - Navigate", jsonString);
                     Toast.makeText(getActivity(), "Get ready... This is gonna get wild",
                             Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(getActivity(), RestService.class);
+                    intent.putExtra("json", jsonString);
+                    getActivity().startService(intent);
                 }
                 else{
                     Toast.makeText(getActivity(), "Select waypoints before you can sail...",
