@@ -17,13 +17,13 @@ public class DbHelper extends SQLiteOpenHelper {
     public static final String LAT = "Latitude";
     public static final String LON = "Longitude";
 
-    private static final String LOG_TAG = "HighScoreDbHelper";
+    private static final String LOG_TAG = "BoatDBHelper";
 
     private static final String CREATE_TABLE_SQL =
             "create table "+TABLE+" ("+
                     ID_COLUMN+" integer primary key autoincrement, "+
-                    LAT+" text not null, "+
-                    LON+" integer not null );";
+                    LAT+" REAL not null, "+
+                    LON+" REAL not null );";
     private static final String DROP_TABLE_SQL =
             "drop table if exists "+TABLE+";";
 

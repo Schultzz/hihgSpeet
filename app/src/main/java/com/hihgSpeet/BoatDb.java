@@ -13,7 +13,7 @@ import static com.hihgSpeet.DbHelper.*;
  * Created by asd on 14-12-2015.
  */
 public class BoatDb implements AutoCloseable {
-    private static final String LOG_TAG = "HighScoreDb";
+    private static final String LOG_TAG = "BoatDB";
     private SQLiteDatabase db;
     private final Context context;
     private final DbHelper helper;
@@ -36,7 +36,7 @@ public class BoatDb implements AutoCloseable {
         }
     }
 
-    public long createCordinats(int lat, int lon) {
+    public long createCordinats(double lat, double lon) {
         try {
             ContentValues values = new ContentValues();
             values.put(LAT, lat);
@@ -53,4 +53,9 @@ public class BoatDb implements AutoCloseable {
         return db.rawQuery("select * from "+TABLE, null);
     }
 
+    public void deleteTable(){
+
+        db.execSQL("delete from boatPos");
+
+    }
 }

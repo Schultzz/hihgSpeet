@@ -15,9 +15,9 @@ import self.philbrown.droidQuery.Function;
  */
 public class RestService {
 
-    private OneFragment context;
+    private boatInfoFragment context;
 
-    public RestService(OneFragment context) {
+    public RestService(boatInfoFragment context) {
         this.context = context;
     }
 
