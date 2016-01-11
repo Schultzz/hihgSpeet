@@ -14,9 +14,16 @@
         android:layout_height="match_parent"
         tools:context="com.hihgSpeet.MapsActivity" />
 
-    <TextView
+    <!--<TextView-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/LatLngText"/>-->
+
+    <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/LatLngText"/>
+        android:text="Navigate this route!"
+        android:id="@+id/Navigatebutton"
+        />
 
 </FrameLayout>

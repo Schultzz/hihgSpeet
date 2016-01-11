@@ -1,6 +1,7 @@
 package com.hihgSpeet;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -8,11 +9,14 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 //import android.support.v4.app.FragmentActivity;
+import android.util.JsonWriter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -22,6 +26,11 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -34,6 +43,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private Marker currentMarker;
     private ArrayList<Marker> markers = new ArrayList();
+    private Gson gson = new Gson();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,28 +65,64 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupMapFragment();
+
+        //Setup our listener for the navigate button
+        Button btn = (Button) getActivity().findViewById(R.id.Navigatebutton);
+        btn.setOnClickListener(new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                if(markers.size()>0){
+                    ArrayList<LatLng> latLngList = new ArrayList<LatLng>();
+                    for(Marker marker : markers){
+                        latLngList.add(marker.getPosition());
+                    }
+                    String jsonString = gson.toJson(latLngList);
+                    Log.d("PER - Navigate", jsonString);
+                    Toast.makeText(getActivity(), "Get ready... This is gonna get wild",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "Select waypoints before you can sail...",
+                            Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+    }
+
+    private void navigateButton() {
+
+
+
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        Log.d("Debug - Activity", getContext().toString());
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.zoomBy(12));
-        // Add a marker in Sydney and move the camera
-//        LatLng sydney = new LatLng(-34, 151);
-//        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
 
-                TextView latLngTW = (TextView) getActivity().findViewById(R.id.LatLngText);
-                String twString = "Latitude: " + latLng.latitude + ", Longtitude: " + latLng.longitude;
-                latLngTW.setText(twString);
-                Log.d("Debug", twString);
+                //LatLong textview on mapfragment
+//                TextView latLngTW = (TextView) getActivity().findViewById(R.id.LatLngText);
+//                String twString = "Latitude: " + latLng.latitude + ", Longtitude: " + latLng.longitude;
+//                latLngTW.setText(twString);
+//                Log.d("Debug", twString);
                 LatLng wayPoint = new LatLng(latLng.latitude, latLng.longitude);
-                Marker newMarker = mMap.addMarker(new MarkerOptions().position(wayPoint).title("Waypoint " + (markers.size()+1)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                Marker newMarker = mMap.addMarker(new MarkerOptions().position(wayPoint).title("Waypoint " + (markers.size() + 1)).icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
                 markers.add(newMarker);
+                if (markers.size() > 1) {
+                    Log.d("Debug", "Inside if");
+                    mMap.addPolyline(
+                            new PolylineOptions()
+                                    .add(newMarker.getPosition(), markers.get(markers.size() - 2).getPosition())
+                                    .width(5)
+                                    .color(Color.RED));
+                }
                 mMap.moveCamera(CameraUpdateFactory.newLatLng(wayPoint));
 
             }
@@ -133,4 +179,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
          //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
     }
+
+
+
 }
