@@ -104,6 +104,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
+        System.out.println("HEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!............");
+
         Log.d("Debug - Activity", getContext().toString());
         mMap = googleMap;
         mMap.moveCamera(CameraUpdateFactory.zoomBy(12));

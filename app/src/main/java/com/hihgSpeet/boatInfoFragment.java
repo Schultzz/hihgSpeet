@@ -1,9 +1,8 @@
 package com.hihgSpeet;
 
-import android.content.Intent;
 import android.database.Cursor;
-import android.support.v4.app.ListFragment;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -77,22 +76,25 @@ public class boatInfoFragment extends ListFragment {
         Toast.makeText(getActivity(), this.getListAdapter().getItem(position).toString(), Toast.LENGTH_SHORT).show();
         if (position == 5) {
             // rest.getJSON();
-            System.out.println("inside 5.....................");
-            Intent intent = new Intent(getActivity(), RestService.class);
-            intent.putExtra("json", "bjørn");
-            getActivity().startService(intent);
-
-           // System.out.println(db.createCordinats(lat, lon));
+            db.fillDatabase();
+           // System.out.println(db.createCoordinates(lat, lon));
         } else if (position == 1) {
             db.deleteTable();
         } else if (position == 0) {
-            Cursor c = db.getCordinats();
+            Cursor c = db.getCoordinates();
             c.moveToFirst();
             do {
-                System.err.println(c.getString(1) + " " + c.getString(2));
+                System.err.println(c.getInt(0) + " " + c.getInt(1) + " " + c.getFloat(2) + " " + c.getFloat(3));
             } while (c.moveToNext());
             c.close();
-            // Toast.makeText(getActivity(), db.getCordinats().toString(), Toast.LENGTH_SHORT).show();
+
+            Cursor c1 = db.getCoordinates1();
+            c1.moveToFirst();
+            do {
+                System.err.println(c1.getInt(0));
+            } while (c.moveToNext());
+            c.close();
+            // Toast.makeText(getActivity(), db.getCoordinates().toString(), Toast.LENGTH_SHORT).show();
         }
     }
 

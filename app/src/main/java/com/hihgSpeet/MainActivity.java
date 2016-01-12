@@ -41,9 +41,6 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    /// UBER NUB SHOUDL BE REMOVED
-    boolean counter = false;
-
     private boatInfoFragment boatInfoFragment = new boatInfoFragment();
 
     @Override
