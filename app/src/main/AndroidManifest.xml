@@ -45,12 +45,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCUz0uPPXoN-6iCgdDy1_HLuv5CrQgNQCQ" />
 
-        <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
-
-        </activity>
-
         <!-- [START gcm_receiver] -->
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"

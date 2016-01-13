@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.List;
 
 
-public class dbFragment extends Fragment implements OnMapReadyCallback {
+public class MapDbFragment extends Fragment implements OnMapReadyCallback {
 
     BoatDb db;
     Boolean spinnerFirst = true;
@@ -33,7 +34,7 @@ public class dbFragment extends Fragment implements OnMapReadyCallback {
     MapView mapView;
     GoogleMap mMap;
 
-    public dbFragment() {
+    public MapDbFragment() {
         // Required empty public constructor
     }
 
@@ -42,7 +43,6 @@ public class dbFragment extends Fragment implements OnMapReadyCallback {
         super.onCreate(savedInstanceState);
         db = new BoatDb(this.getContext());
         db.open();
-
     }
 
     @Override
@@ -66,7 +66,7 @@ public class dbFragment extends Fragment implements OnMapReadyCallback {
                 parent.removeView(view);
         }
         try {
-            view = inflater.inflate(R.layout.fragment_two, container, false);
+            view = inflater.inflate(R.layout.fragment_map_db, container, false);
         } catch (InflateException e) {
         /* map is already there, just return view as it is */
         }
@@ -90,7 +90,7 @@ public class dbFragment extends Fragment implements OnMapReadyCallback {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(!spinnerFirst){
+                if (!spinnerFirst) {
                     Toast.makeText(getActivity(), "list: " + items.get(position), Toast.LENGTH_LONG).show();
                     fillMapWithMarkers(items.get(position));
                 }
@@ -111,11 +111,13 @@ public class dbFragment extends Fragment implements OnMapReadyCallback {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(dataAdapter);
+
+        Log.d("SetupSpinner", " in hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ");
+
     }
 
 
     public void fillMapWithMarkers(String routeDate) {
-
 
         mMap.clear();
 

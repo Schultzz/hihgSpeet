@@ -41,16 +41,13 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private ViewPager viewPager;
 
-    private boatInfoFragment boatInfoFragment = new boatInfoFragment();
+    private BoatInfoFragment BoatInfoFragment = new BoatInfoFragment();
 
     @Override
     public void onBackPressed() {
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+    public void setupViewPager1(){
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -62,6 +59,17 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        Log.d("ViewPager", "11111111111111111111111111111111111111111");
+
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        setupViewPager1();
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -75,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
 
                     String message = intent.getStringExtra("message");
 
-                    boatInfoFragment.updateList(message);
+                    BoatInfoFragment.updateList(message);
 
                 } else {
                     Toast.makeText(MainActivity.this,getString(R.string.token_error_message), Toast.LENGTH_SHORT).show();
@@ -107,18 +115,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(boatInfoFragment, "Boat info");
+        adapter.addFragment(BoatInfoFragment, "Boat info");
         adapter.addFragment(new MapFragment(), "Boat navigation");
-        adapter.addFragment(new dbFragment(), "Boat Pos");
+        adapter.addFragment(new MapDbFragment(), "Boat Pos");
         viewPager.setAdapter(adapter);
+
+        Log.d("setupViewPager2", "222222222222222222222222222222222");
     }
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+   public class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList();
         private final List<String> mFragmentTitleList = new ArrayList();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
+            Log.d("Constructor Viewpager", "3333333333333333333333333333");
         }
 
         @Override

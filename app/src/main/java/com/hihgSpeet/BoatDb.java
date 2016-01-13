@@ -34,7 +34,6 @@ public class BoatDb implements AutoCloseable {
     }
 
     public void close() {
-        System.out.println("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
         db.close();
     }
 
@@ -48,6 +47,7 @@ public class BoatDb implements AutoCloseable {
         }
     }
 
+    //Used to create new Coordinates.
     public long createCoordinates(double lat, double lon) {
         try {
             ContentValues values = new ContentValues();
@@ -55,11 +55,12 @@ public class BoatDb implements AutoCloseable {
             values.put(LON, lon);
             return db.insert(TABLE, null, values);
         } catch (SQLiteException sqle) {
-            Log.w(LOG_TAG, "Could not create high score " + sqle.getMessage());
+            Log.w(LOG_TAG, "Could not create coordinates " + sqle.getMessage());
             return -1;
         }
     }
 
+    //TODO: Remove these
     public Cursor getCoordinates() {
         return db.rawQuery("select * from " + TABLE, null);
     }
@@ -104,7 +105,7 @@ public class BoatDb implements AutoCloseable {
 
         List<LatLng> list = new ArrayList<LatLng>();
         LatLng tempLatLng;
-        System.out.println("111111111111111111111111111111111111000000000000000000");
+
         do {
             tempLatLng = new LatLng(cursor.getDouble(0), cursor.getDouble(1));
             System.out.println(tempLatLng.toString());

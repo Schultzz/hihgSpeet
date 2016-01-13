@@ -15,16 +15,25 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class boatInfoFragment extends ListFragment {
+public class BoatInfoFragment extends ListFragment {
 
     private double lat, lon;
     private BoatDb db;
+
     private ArrayList<String> listItems = new ArrayList();
 
-    public boatInfoFragment() {
+    public BoatInfoFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_boat_info, container, false);
+    }
+
+    // Called by the localbroadcast service, when there are new data from the GCM service.
     public void updateList(String msgJson) {
 
         JSONObject msg;
@@ -62,22 +71,23 @@ public class boatInfoFragment extends ListFragment {
         listItems.add("ErrorMargin:");
         listItems.add("           Save current location");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_list_item_1, listItems);
-        setListAdapter(adapter);
+        updateAdapter();
 
+
+        //TODO Fjern efter alle har fået noget i deres DB
         db = new BoatDb(this.getContext());
         db.open();
 
     }
 
+    // TODO: Remove? Only used for testing/debuging purpose.
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Toast.makeText(getActivity(), this.getListAdapter().getItem(position).toString(), Toast.LENGTH_SHORT).show();
         if (position == 5) {
             // rest.getJSON();
             db.fillDatabase();
-           // System.out.println(db.createCoordinates(lat, lon));
+            // System.out.println(db.createCoordinates(lat, lon));
         } else if (position == 1) {
             db.deleteTable();
         } else if (position == 0) {
@@ -98,13 +108,7 @@ public class boatInfoFragment extends ListFragment {
         }
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_one, container, false);
-    }
-
+    //Add new item to ListView
     public void addItem(String item) {
 
         listItems.add(item);
@@ -112,6 +116,7 @@ public class boatInfoFragment extends ListFragment {
 
     }
 
+    //Updates ListView.
     public void updateAdapter() {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(),
                 android.R.layout.simple_list_item_1, listItems);

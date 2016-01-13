@@ -37,6 +37,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.2.+'
     //  compile 'com.github.phil-brown:droidQuery:v1.0.0'
     compile files('libs/droidquery.jar')
+    compile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'
