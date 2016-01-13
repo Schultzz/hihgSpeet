@@ -6,17 +6,15 @@ import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-//import android.support.v4.app.FragmentActivity;
-import android.util.JsonWriter;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,18 +27,17 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
+
+//import android.support.v4.app.FragmentActivity;
 
 /**
  * Created by Søren on 14-12-2015.
  */
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-
+    private static View view;
     private GoogleMap mMap;
     private Marker currentMarker;
     private ArrayList<Marker> markers = new ArrayList();
@@ -51,22 +48,32 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         super.onCreate(savedInstanceState);
 
-
-
     }
-
+    
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_map, container, false);
+//        setupMapFragment();
+
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.fragment_map, container, false);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
+        return view;
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setupMapFragment();
-
         //Setup our listener for the navigate button
         Button btn = (Button) getActivity().findViewById(R.id.Navigatebutton);
         btn.setOnClickListener(new View.OnClickListener(){
@@ -134,6 +141,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             }
         });
 
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MapFragment mapFragment = (MapFragment)getFragmentManager().findFragmentById(R.id.map);
+        getFragmentManager().beginTransaction().remove(mapFragment).commit();
     }
 
     public void setupMapFragment(){

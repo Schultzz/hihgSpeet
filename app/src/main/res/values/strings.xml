@@ -18,6 +18,8 @@
 
     <string name="dbPrompt">Choose a route</string>
 
+    <string name="api_key">AIzaSyCUz0uPPXoN-6iCgdDy1_HLuv5CrQgNQCQ</string>
+
     <string-array name="dbDropdown">
         <item>Route 1</item>
         <item>Route 2</item>

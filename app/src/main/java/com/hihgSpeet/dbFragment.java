@@ -1,9 +1,11 @@
 package com.hihgSpeet;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +14,24 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.List;
 
 
-public class dbFragment extends Fragment {
+public class dbFragment extends Fragment implements OnMapReadyCallback {
 
     BoatDb db;
+    Boolean spinnerFirst = true;
+
+    MapView mapView;
+    GoogleMap mMap;
 
     public dbFragment() {
         // Required empty public constructor
@@ -30,19 +42,35 @@ public class dbFragment extends Fragment {
         super.onCreate(savedInstanceState);
         db = new BoatDb(this.getContext());
         db.open();
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        SupportMapFragment mapFragment = ((SupportMapFragment) this.getChildFragmentManager()
+                .findFragmentById(R.id.map2));
+        mapFragment.getMapAsync(this);
         setupSpinner();
     }
+
+    private static View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_two, container, false);
+        if (view != null) {
+            ViewGroup parent = (ViewGroup) view.getParent();
+            if (parent != null)
+                parent.removeView(view);
+        }
+        try {
+            view = inflater.inflate(R.layout.fragment_two, container, false);
+        } catch (InflateException e) {
+        /* map is already there, just return view as it is */
+        }
+        return view;
     }
 
     @Override
@@ -50,18 +78,25 @@ public class dbFragment extends Fragment {
         super.onResume();
     }
 
+
     public void setupSpinner() {
+
 
         final List<String> items;
         items = db.fetchRouteNames();
 
-        Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner);
+        final Spinner spinner = (Spinner) getActivity().findViewById(R.id.spinner);
 
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getActivity(), "list: " + items.get(position), Toast.LENGTH_LONG).show();
-                fillMapWithMarkers(items.get(position));
+                if(!spinnerFirst){
+                    Toast.makeText(getActivity(), "list: " + items.get(position), Toast.LENGTH_LONG).show();
+                    fillMapWithMarkers(items.get(position));
+                }
+
+                spinnerFirst = false;
+
             }
 
             @Override
@@ -79,20 +114,31 @@ public class dbFragment extends Fragment {
     }
 
 
-    public void fillMapWithMarkers(String routeDate){
+    public void fillMapWithMarkers(String routeDate) {
 
 
+        mMap.clear();
 
         List<LatLng> coordinates = db.fectCoordinates(routeDate);
         for(LatLng temp : coordinates){
-
+            mMap.addMarker(new MarkerOptions()
+                    .position(new LatLng(temp.latitude, temp.longitude))
+                    .title("Route"));
         }
 
-
+        mMap.addPolyline(
+                new PolylineOptions()
+                        .addAll(coordinates)
+                        .width(5)
+                        .color(Color.RED));
 
     }
 
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
 
+        mMap = googleMap;
 
+    }
 }
