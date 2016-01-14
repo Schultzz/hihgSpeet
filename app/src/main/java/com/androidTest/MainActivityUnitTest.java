@@ -1,13 +1,17 @@
 package com.androidTest;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.test.ActivityUnitTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
+import android.test.suitebuilder.annotation.Suppress;
 import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
+import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.google.android.gms.maps.MapFragment;
@@ -21,8 +25,6 @@ import com.hihgSpeet.R;
 public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity> {
 
     Intent mLaunchIntent;
-
-
 
     public MainActivityUnitTest() {
         super(MainActivity.class);
@@ -45,21 +47,7 @@ public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity> {
 
         activity.getFragmentManager().beginTransaction().add(R.layout.fragment_map, new MapFragment(), "MapFrag").commit();
 
-
-
- //       ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.viewpager);
-
-   //     System.out.println(viewPager.getAdapter().toString() + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-
-        /*
-        final Button launchNextButton =
-                (Button) getActivity()
-                        .findViewById(R.id.launch_next_activity_button);
-        */
-
-
     }
-
 
 
     @MediumTest
@@ -87,11 +75,11 @@ public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity> {
 
         assertNotNull(frag);
 
-        assertEquals(title, "Boat Pos");
+        assertEquals(title, "Boat Position");
 
     }
 
-
+   @Suppress
     public void testMapFragment(){
 
         ViewPager viewPager = (ViewPager) activity.findViewById(R.id.viewpager);
@@ -103,9 +91,17 @@ public class MainActivityUnitTest extends ActivityUnitTestCase<MainActivity> {
         TabLayout.Tab tab = tabLayout.getTabAt(1);
         tab.select();
 
-        Button button = (Button) frag.getView().findViewById(R.id.Navigatebutton);
+        //Button button = (Button) frag.getView().findViewById(R.id.Navigatebutton);
+        ViewGroup view = (ViewGroup) activity.findViewById(android.R.id.content);
 
-        //Button button = (Button) getActivity().findViewById(R.id.Navigatebutton);
+
+        LayoutInflater layoutInflater = (LayoutInflater) activity.getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        layoutInflater.inflate(R.layout.fragment_map, view, false);
+
+        System.out.println();
+
+        Button button = (Button) getActivity().findViewById(R.id.Navigatebutton);
 
         button.performClick();
 

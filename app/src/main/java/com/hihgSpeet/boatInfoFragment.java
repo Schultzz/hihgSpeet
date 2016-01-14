@@ -1,6 +1,5 @@
 package com.hihgSpeet;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 public class BoatInfoFragment extends ListFragment {
 
     private double lat, lon;
+    private final int saveBtn = 5;
     private BoatDb db;
 
     private ArrayList<String> listItems = new ArrayList();
@@ -80,31 +80,15 @@ public class BoatInfoFragment extends ListFragment {
 
     }
 
-    // TODO: Remove? Only used for testing/debuging purpose.
+    // TODO: Remove. Only used for testing/debuging purpose.
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         Toast.makeText(getActivity(), this.getListAdapter().getItem(position).toString(), Toast.LENGTH_SHORT).show();
-        if (position == 5) {
+        if (position == saveBtn) {
             // rest.getJSON();
-            db.fillDatabase();
+            //db.fillDatabase();
+            Toast.makeText(getActivity(), "Not implementet yet!", Toast.LENGTH_SHORT).show();
             // System.out.println(db.createCoordinates(lat, lon));
-        } else if (position == 1) {
-            db.deleteTable();
-        } else if (position == 0) {
-            Cursor c = db.getCoordinates();
-            c.moveToFirst();
-            do {
-                System.err.println(c.getInt(0) + " " + c.getInt(1) + " " + c.getFloat(2) + " " + c.getFloat(3));
-            } while (c.moveToNext());
-            c.close();
-
-            Cursor c1 = db.getCoordinates1();
-            c1.moveToFirst();
-            do {
-                System.err.println(c1.getInt(0));
-            } while (c.moveToNext());
-            c.close();
-            // Toast.makeText(getActivity(), db.getCoordinates().toString(), Toast.LENGTH_SHORT).show();
         }
     }
 

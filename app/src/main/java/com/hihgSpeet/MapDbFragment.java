@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,12 +27,12 @@ import java.util.List;
 
 public class MapDbFragment extends Fragment implements OnMapReadyCallback {
 
-    BoatDb db;
-    Boolean spinnerFirst = true;
+    private BoatDb db;
+    private Boolean spinnerFirst = true;
     private static View view;
 
-    MapView mapView;
-    GoogleMap mMap;
+    private MapView mapView;
+    private GoogleMap mMap;
 
     public MapDbFragment() {
         // Required empty public constructor
@@ -72,6 +71,12 @@ public class MapDbFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        db.close();
+    }
+
     public void setupSpinner() {
 
 
@@ -104,9 +109,6 @@ public class MapDbFragment extends Fragment implements OnMapReadyCallback {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 
         spinner.setAdapter(dataAdapter);
-
-        Log.d("SetupSpinner", " in hereeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee  ");
-
     }
 
 

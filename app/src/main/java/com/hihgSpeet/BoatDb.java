@@ -16,8 +16,8 @@ import static com.hihgSpeet.DbHelper.ID_COLUMN;
 import static com.hihgSpeet.DbHelper.LAT;
 import static com.hihgSpeet.DbHelper.LON;
 import static com.hihgSpeet.DbHelper.ROUTEDATE;
-import static com.hihgSpeet.DbHelper.TABLE;
-import static com.hihgSpeet.DbHelper.TABLE2;
+import static com.hihgSpeet.DbHelper.TABLE_COORDINATES;
+import static com.hihgSpeet.DbHelper.TABLE_ROUTES;
 
 /**
  * Created by asd on 14-12-2015.
@@ -53,7 +53,7 @@ public class BoatDb implements AutoCloseable {
             ContentValues values = new ContentValues();
             values.put(LAT, lat);
             values.put(LON, lon);
-            return db.insert(TABLE, null, values);
+            return db.insert(TABLE_COORDINATES, null, values);
         } catch (SQLiteException sqle) {
             Log.w(LOG_TAG, "Could not create coordinates " + sqle.getMessage());
             return -1;
@@ -62,11 +62,11 @@ public class BoatDb implements AutoCloseable {
 
     //TODO: Remove these
     public Cursor getCoordinates() {
-        return db.rawQuery("select * from " + TABLE, null);
+        return db.rawQuery("select * from " + TABLE_COORDINATES, null);
     }
 
     public Cursor getCoordinates1() {
-        return db.rawQuery("SELECT " + ID_COLUMN + " FROM " + TABLE2 + " WHERE " + ROUTEDATE + " = " + "'01-01-2016" + "';", null);
+        return db.rawQuery("SELECT " + ID_COLUMN + " FROM " + TABLE_ROUTES + " WHERE " + ROUTEDATE + " = " + "'01-01-2016" + "';", null);
     }
 
     public void deleteTable() {
@@ -77,7 +77,7 @@ public class BoatDb implements AutoCloseable {
 
     public List<String> fetchRouteNames() {
 
-        Cursor cursor = db.rawQuery("SELECT " + ROUTEDATE + " FROM " + TABLE2, null);
+        Cursor cursor = db.rawQuery("SELECT " + ROUTEDATE + " FROM " + TABLE_ROUTES, null);
 
         cursor.moveToFirst();
 
@@ -97,9 +97,8 @@ public class BoatDb implements AutoCloseable {
     public List<LatLng> fectCoordinates(String routeDate) {
 
 
-        Cursor cursor = db.rawQuery("SELECT " + LAT + ", " + LON + " FROM " + TABLE + " WHERE " + ROUTEDATE + " = "
-                + "(SELECT " + ID_COLUMN + " FROM " + TABLE2 + " WHERE " + ROUTEDATE + " = '" + routeDate + "');", null);
-        //cursor = db.rawQuery("SELECT " + LAT + ", " + LON + " FROM " + TABLE + " WHERE " + ROUTEDATE + " = 1;", null);
+        Cursor cursor = db.rawQuery("SELECT " + LAT + ", " + LON + " FROM " + TABLE_COORDINATES + " WHERE " + ROUTEDATE + " = "
+                + "(SELECT " + ID_COLUMN + " FROM " + TABLE_ROUTES + " WHERE " + ROUTEDATE + " = '" + routeDate + "');", null);
 
         cursor.moveToFirst();
 
@@ -108,36 +107,35 @@ public class BoatDb implements AutoCloseable {
 
         do {
             tempLatLng = new LatLng(cursor.getDouble(0), cursor.getDouble(1));
-            System.out.println(tempLatLng.toString());
             list.add(tempLatLng);
-
         } while (cursor.moveToNext());
 
         cursor.close();
 
         return list;
-
-
     }
 
+
+    // fills the database with test data
     public void fillDatabase() {
 
-        db.execSQL("INSERT INTO " + TABLE2 + " VALUES (null, '01-01-2016');");
-        Cursor cursor = db.rawQuery("SELECT " + ID_COLUMN + " FROM " + TABLE2 + " WHERE " + ROUTEDATE + " = '01-01-2016';", null);
+        db.execSQL("INSERT INTO " + TABLE_ROUTES + " VALUES (null, '01-01-2016');");
+        Cursor cursor = db.rawQuery("SELECT " + ID_COLUMN + " FROM " + TABLE_ROUTES + " WHERE " + ROUTEDATE + " = '01-01-2016';", null);
         cursor.moveToFirst();
         int id = cursor.getInt(0);
-        db.execSQL("INSERT INTO " + TABLE + " VALUES (null, " + id + ", 55.772780, 12.486029);");
-        db.execSQL("INSERT INTO " + TABLE + " VALUES (null, " + id + ", 55.774180, 12.487896);");
-        db.execSQL("INSERT INTO " + TABLE + " VALUES (null, " + id + ", 55.772695, 12.490321);");
+        db.execSQL("INSERT INTO " + TABLE_COORDINATES + " VALUES (null, " + id + ", 55.772780, 12.486029);");
+        db.execSQL("INSERT INTO " + TABLE_COORDINATES + " VALUES (null, " + id + ", 55.774180, 12.487896);");
+        db.execSQL("INSERT INTO " + TABLE_COORDINATES + " VALUES (null, " + id + ", 55.772695, 12.490321);");
         cursor.close();
 
-        db.execSQL("INSERT INTO " + TABLE2 + " VALUES (null, '02-01-2016');");
-        cursor = db.rawQuery("SELECT " + ID_COLUMN + " FROM " + TABLE2 + " WHERE " + ROUTEDATE + " = '02-01-2016';", null);
+        db.execSQL("INSERT INTO " + TABLE_ROUTES + " VALUES (null, '02-01-2016');");
+        cursor = db.rawQuery("SELECT " + ID_COLUMN + " FROM " + TABLE_ROUTES + " WHERE " + ROUTEDATE + " = '02-01-2016';", null);
         cursor.moveToFirst();
         id = cursor.getInt(0);
-        db.execSQL("INSERT INTO " + TABLE + " VALUES (null, " + id + ", 55.767959, 12.469413);");
-        db.execSQL("INSERT INTO " + TABLE + " VALUES (null, " + id + ", 55.767918, 12.463422);");
-        db.execSQL("INSERT INTO " + TABLE + " VALUES (null, " + id + ", 55.772100, 12.455844);");
+        db.execSQL("INSERT INTO " + TABLE_COORDINATES + " VALUES (null, " + id + ", 55.767959, 12.469413);");
+        db.execSQL("INSERT INTO " + TABLE_COORDINATES + " VALUES (null, " + id + ", 55.767918, 12.463422);");
+        db.execSQL("INSERT INTO " + TABLE_COORDINATES + " VALUES (null, " + id + ", 55.772100, 12.455844);");
+
         cursor.close();
 
     }

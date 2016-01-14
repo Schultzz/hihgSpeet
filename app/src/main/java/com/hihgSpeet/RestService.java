@@ -6,7 +6,11 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import self.philbrown.droidQuery.$;
 import self.philbrown.droidQuery.AjaxOptions;
@@ -44,12 +48,8 @@ public class RestService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        System.out.println("IN HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-
         String data = intent.getExtras().getString("json");
 
-        String rsp = "";
-        //http://10.0.3.2 = genymotion's IP til computerens localhost
         $.ajax(new AjaxOptions()
                 .url("https://pure-cove-4683.herokuapp.com/api/route")
                 .type("POST")
@@ -60,7 +60,6 @@ public class RestService extends IntentService {
                     @Override
                     public void invoke($ droidQuery, Object... params) {
                         JSONObject response = (JSONObject) params[0];
-                        System.out.println("11111111111111111111111111111111111111111111");
                         Log.e("ServerDb-createList-suc", response.toString());
                     }
                 })
@@ -69,7 +68,6 @@ public class RestService extends IntentService {
                     public void invoke($ droidQuery, Object... params) {
                         int statusCode = (Integer) params[1];
                         String error = (String) params[2];
-                        System.out.println("22222222222222222222222222222222222222222222222");
                         Log.e("ServerDb-createList-err", statusCode + " " + error);
                     }
                 }).debug(true));
@@ -80,6 +78,5 @@ public class RestService extends IntentService {
     public void onDestroy() {
         Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
     }
-
 
 }

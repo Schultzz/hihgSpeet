@@ -12,8 +12,8 @@ import android.util.Log;
 public class DbHelper extends SQLiteOpenHelper {
     public static final String DATABASE = "datastorage";
     public static final int VERSION = 8;
-    public static final String TABLE = "boatPos";
-    public static final String TABLE2 = "boatRoutes";
+    public static final String TABLE_COORDINATES = "boatPos";
+    public static final String TABLE_ROUTES = "boatRoutes";
     public static final String ID_COLUMN = "_id";
     public static final String LAT = "Latitude";
     public static final String LON = "Longitude";
@@ -22,27 +22,27 @@ public class DbHelper extends SQLiteOpenHelper {
     private static final String LOG_TAG = "BoatDBHelper";
 
     //String for first table
-    private static final String CREATE_TABLE_SQL2 =
-            "create table "+TABLE2+" ("+
+    private static final String CREATE_TABLE_SQL_ROUTES =
+            "create table "+ TABLE_ROUTES +" ("+
                     ID_COLUMN+" integer primary key autoincrement, "+
                     ROUTEDATE+" STRING not null);";
 
 
-    private static final String CREATE_TABLE_SQL =
-            "create table "+TABLE+" ("+
+    private static final String CREATE_TABLE_SQL_COORDINATES =
+            "create table "+ TABLE_COORDINATES +" ("+
                     ID_COLUMN+" integer primary key autoincrement, "+
                     ROUTEDATE+" integer not null,"+
                     LAT+" REAL not null, "+
                     LON+" REAL not null,"+
-                    "FOREIGN KEY ("+ROUTEDATE+") REFERENCES " + TABLE2+"(" + ID_COLUMN + ")"+
+                    "FOREIGN KEY ("+ROUTEDATE+") REFERENCES " + TABLE_ROUTES +"(" + ID_COLUMN + ")"+
                     ");";
 
 
     private static final String DROP_TABLE_SQL =
-            "drop table if exists "+TABLE+";";
+            "drop table if exists "+ TABLE_COORDINATES +";";
 
     private static final String DROP_TABLE_SQL_2 =
-            "drop table if exists "+TABLE2+";";
+            "drop table if exists "+ TABLE_ROUTES +";";
 
 
     public DbHelper(Context context) {
@@ -52,8 +52,8 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
-            db.execSQL(CREATE_TABLE_SQL2);
-            db.execSQL(CREATE_TABLE_SQL);
+            db.execSQL(CREATE_TABLE_SQL_ROUTES);
+            db.execSQL(CREATE_TABLE_SQL_COORDINATES);
             Log.v(LOG_TAG, "Database " + DATABASE + " created");
         }
         catch (SQLiteException sqle) {

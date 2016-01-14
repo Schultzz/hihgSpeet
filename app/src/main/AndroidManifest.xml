@@ -13,6 +13,7 @@
 
     <!-- [START gcm_permission] -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <!-- Allows using PowerManager WakeLocks to keep processor from sleeping or screen from dimming.-->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <!-- [END gcm_permission] -->
 
@@ -79,13 +80,13 @@
             android:name="com.services.RegistrationIntentService"
             android:exported="false">
         </service>
-
+        <!-- [START rest_service] -->
         <service
             android:name="com.hihgSpeet.RestService"
             android:enabled="true"
             android:exported="true">
-
         </service>
+        <!-- [END rest_service] -->
 
     </application>
 
