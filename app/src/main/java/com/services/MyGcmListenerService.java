@@ -30,9 +30,6 @@ import android.util.Log;
 import com.google.android.gms.gcm.GcmListenerService;
 import com.hihgSpeet.MainActivity;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class MyGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
@@ -52,31 +49,17 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d(TAG, "From: " + from);
         Log.d(TAG, "Message: " + message);
 
-        if (from.startsWith("/topics/")) {
-            // message received from some topic.
-        } else {
-            // normal downstream message.
-        }
-
-        // [START_EXCLUDE]
-        /**
-         * Production applications would usually process the message here.
-         * Eg: - Syncing with server.
-         *     - Store message in local database.
-         *     - Update UI.
-         */
-
         /**
          * In some cases it may be useful to show a notification indicating to the user
          * that a message was received.
          */
 
-        Intent intent = new Intent("test");
+        Intent intent = new Intent(QuickstartPreferences.MESSAGE_FROM_GCM);
 
         intent.putExtra("message", message);
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-
+        //Notify user
         sendNotification(message);
 
         // [END_EXCLUDE]
@@ -97,7 +80,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setContentTitle("Hihg Speet")
+                .setContentTitle("HihgSpeet")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

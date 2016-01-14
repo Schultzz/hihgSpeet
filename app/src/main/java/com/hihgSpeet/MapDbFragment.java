@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -30,6 +30,7 @@ public class MapDbFragment extends Fragment implements OnMapReadyCallback {
 
     BoatDb db;
     Boolean spinnerFirst = true;
+    private static View view;
 
     MapView mapView;
     GoogleMap mMap;
@@ -54,8 +55,6 @@ public class MapDbFragment extends Fragment implements OnMapReadyCallback {
         setupSpinner();
     }
 
-    private static View view;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -73,12 +72,6 @@ public class MapDbFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-
     public void setupSpinner() {
 
 
@@ -91,7 +84,7 @@ public class MapDbFragment extends Fragment implements OnMapReadyCallback {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (!spinnerFirst) {
-                    Toast.makeText(getActivity(), "list: " + items.get(position), Toast.LENGTH_LONG).show();
+
                     fillMapWithMarkers(items.get(position));
                 }
 
@@ -141,6 +134,6 @@ public class MapDbFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
 
         mMap = googleMap;
-
+        mMap.moveCamera( CameraUpdateFactory.newLatLngZoom(new LatLng(55.758735, 12.482387), 12.0f) );
     }
 }

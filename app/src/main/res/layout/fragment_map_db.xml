@@ -19,7 +19,11 @@
         android:id="@+id/spinner"
         android:entries="@array/dbDropdown"
         android:prompt="@string/dbPrompt"
+        android:layout_gravity="right"
+        android:background="@color/common_google_signin_btn_text_light_disabled"
         />
+
+
 
 
 </FrameLayout>

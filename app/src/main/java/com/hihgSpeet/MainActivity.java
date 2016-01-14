@@ -16,7 +16,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,11 +42,24 @@ public class MainActivity extends AppCompatActivity {
 
     private BoatInfoFragment BoatInfoFragment = new BoatInfoFragment();
 
+
     @Override
-    public void onBackPressed() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        initViewPager();
+        initBroadcastReceiver();
+
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
     }
 
-    public void setupViewPager1(){
+    public void initViewPager() {
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -60,16 +72,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
 
-        Log.d("ViewPager", "11111111111111111111111111111111111111111");
-
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        setupViewPager1();
+    public void initBroadcastReceiver() {
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
             @Override
@@ -83,19 +88,14 @@ public class MainActivity extends AppCompatActivity {
 
                     String message = intent.getStringExtra("message");
 
+                    //Updates the infoScreen with information from GCM
                     BoatInfoFragment.updateList(message);
 
                 } else {
-                    Toast.makeText(MainActivity.this,getString(R.string.token_error_message), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.token_error_message), Toast.LENGTH_SHORT).show();
                 }
             }
         };
-
-        if (checkPlayServices()) {
-            // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
-            startService(intent);
-        }
     }
 
     @Override
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
                 new IntentFilter(QuickstartPreferences.REGISTRATION_COMPLETE));
         LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
-                new IntentFilter("test"));
+                new IntentFilter(QuickstartPreferences.MESSAGE_FROM_GCM));
     }
 
     @Override
@@ -115,21 +115,19 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(BoatInfoFragment, "Boat info");
+        adapter.addFragment(BoatInfoFragment, "Boat information");
         adapter.addFragment(new MapFragment(), "Boat navigation");
-        adapter.addFragment(new MapDbFragment(), "Boat Pos");
+        adapter.addFragment(new MapDbFragment(), "Boat Position");
         viewPager.setAdapter(adapter);
 
-        Log.d("setupViewPager2", "222222222222222222222222222222222");
     }
 
-   public class ViewPagerAdapter extends FragmentPagerAdapter {
+    public class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList();
         private final List<String> mFragmentTitleList = new ArrayList();
 
         public ViewPagerAdapter(FragmentManager manager) {
             super(manager);
-            Log.d("Constructor Viewpager", "3333333333333333333333333333");
         }
 
         @Override
@@ -169,8 +167,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    public void navigateButton(View view){
-        Log.d("Debug", "Inside navigate button mainactivity");
+    @Override
+    public void onBackPressed() {
     }
-
 }

@@ -102,16 +102,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         });
     }
 
-    private void navigateButton() {
-
-
-
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
-
-        System.out.println("HEST!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!............");
 
         Log.d("Debug - Activity", getContext().toString());
         mMap = googleMap;
@@ -155,9 +147,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         SupportMapFragment mapFragment = ((SupportMapFragment) this.getChildFragmentManager()
                 .findFragmentById(R.id.map));
         mapFragment.getMapAsync(this);
-        System.out.println("PER3 " +mapFragment);
 
-        //getFragmentManager(), getActivity().getSupportFragmentManager(), and getChildFragmentManager()
 
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
@@ -167,19 +157,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provide
                 if(mMap!=null){
-
-
                     if(currentMarker!=null){
                         currentMarker.remove();
                     }
-
                     LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
 //                    currentMarker =new MarkerOptions().position(currentLatLng).title("You are here")
                     currentMarker = mMap.addMarker(new MarkerOptions().position(currentLatLng).title("You are here"));
                     mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
 
                 }
-                Log.d("Per", location.toString());
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {}
