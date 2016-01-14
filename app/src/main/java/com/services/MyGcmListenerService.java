@@ -86,6 +86,9 @@ public class MyGcmListenerService extends GcmListenerService {
                 .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
+        //Log that something was recived
+        Log.d("NOTIFY", "sendNotification(String message) was called with msg: " + message);
+
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
